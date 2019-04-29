@@ -210,6 +210,7 @@ class DataFramePreprocessor(object):
 
     @classmethod
     def clean_df(cls,df,vk_connector):
+        
         """
         Очищает данные в датафрейме
         df - готовый датафрейм с данными по пользователями в необработанном виде
@@ -296,11 +297,19 @@ class DataFramePreprocessor(object):
         if 'home_phone' in df_col_lst:
             df.drop('home_phone',axis=1,inplace=True)
         df.drop(['first_name','last_name'],axis=1,inplace=True)
+        if 'can_access_closed' in df_col_lst:
+            df.drop('can_access_closed',axis=1,inplace=True)
+        if 'track_code' in df_col_lst:
+            df.drop('track_code',axis=1,inplace=True)
 
         #разбираемся с полями по родственникам пользователя
         if 'relatives' in df_col_lst:
             df['has_relative'] = df['relatives'].apply(lambda x: 1 if x != '' or x != [] else 0)
             df.drop(['relatives'],axis=1,inplace=True)
+        
+        #рандомно мешаем строки в датафрейме (сейчас они упорядочены по возрастным категориям)
+        np.random.seed(0)
+        df = df.reindex(np.random.permutation(df.index))
 
         #готово! датафрейм относительно с чистыми данными. по ним можно построить различные статистики и визуализации и передавать дальше на подготовку данных к построению модели
         logger.info('Готово! Данные в датафрейме очищены. Очищенный датафрейм сохранен в отедльный файл')

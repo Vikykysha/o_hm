@@ -64,8 +64,9 @@ if __name__ == '__main__':
 
     #uids_itog_lst - id юзеров, для которых были сораны посты с их стены и которые мы будем использовать в дальнейшем анализе;в фале с постами uid являются int
     users_raw_post = GetData.load_and_save_walls(VKApiConnector,users_uids)
+    '''
     #очищаем текст с постов юзеров; в users_uids id имеют строковый тип, в датафреймах тоже
-    user_clean_doc_dict = TextProcessing.clean_wall(users_raw_post)
+    user_clean_doc_dict = TextProcessing.clean_wall(ObjectStorage().load_obj('users_wall_posts'))
     '''
     #в полученном списке id в формате int
     uids = ObjectStorage().load_obj('itog_uids_for_analysis')
@@ -85,6 +86,6 @@ if __name__ == '__main__':
     Visual.plot_smoke_distribution(df_clean)
     Visual.plot_bar_from_df(df_clean,'city','город')
     Visual.plot_bar_from_df(df_clean,'country','страна')
-
+    '''
     
     
