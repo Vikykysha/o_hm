@@ -2,9 +2,14 @@ import re
 import string
 import random
 import logging
+import regex
 
 import pandas as pd
 import numpy as np
+import emoji
+
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 from vk_api_method_handler import VKApiConnector
 from storages import ObjectStorage
@@ -12,6 +17,76 @@ from storages import ObjectStorage
 logger = logging.getLogger(__name__)
 
 class DataFrameHelperFunctions(object):
+
+
+    @classmethod
+    def _get_avg_age_from_grad_dates(cls, row):
+        """
+        Генерит примерные возраст из даты окончания школы и института
+        """
+        grad_school = int(row['schools_grad_year'])
+        grad_uni = int(row['graduation'])
+        years = []
+        if grad_uni > 0:
+            for year in range(21, 27):
+                years.append(year + 2019 - grad_uni)
+        if grad_school > 0:
+            for year in range(17, 20):
+                years.append(year + 2019 - grad_school)
+        if len(years) != 0:
+            return int(np.mean(years))
+        else:
+            return 0
+    @classmethod
+    def _get_age_from_brthd(cls,val):
+        """
+        Генерит примерные возраст из даты рождения
+        """
+        if val != '':
+            if len(val.split('.')) == 3:
+                return 2019 - int(val[-4:])
+        return 0
+
+    @classmethod
+    def _get_avg_completeness(cls,row,feat_completeness_lst):
+        """
+        Формирует признак средней заполняемости аккаунта
+        """
+        counter = 0
+        #отдельно обрабатываем те столбцы, где отсутствие - это пустая строка или  "Не указано"
+        for col in ['about', 'activities', 'books','games','home_town','interests','movies', 'music', 'quotes' ,'political', 'langs', 'religion', 'inspired_by',
+        'people_main', 'life_main', 'smoking', 'alcohol']:
+            if row[col] != '' and row[col] != 'Не указано':
+                counter += 1
+        #отдельно обрабатываем числовые признаки
+        for col in ['has_mobile','political','relation','has_facebook', 'has_instagram', 'has_livejournal',
+        'has_twitter', 'has_skype', 'has_relative']:
+            if row[col] != -1 and row[col] != 0:
+                counter += 1
+        return np.round(counter/len(feat_completeness_lst),2)
+
+    @classmethod
+    def _count_tags(cls,text):
+        """
+        Считает количество тэгов в постах
+        """
+        text = ' '.join(text)
+        return len(regex.findall('#', text))
+
+    @classmethod
+    def _count_emoji(cls,text):
+        """
+        Считает количество эмоджи в постах
+        """
+        text = ' '.join(text)
+        emoji_list = []
+        data = regex.findall(r'\X', text)
+        for word in data:
+            if any(char in emoji.UNICODE_EMOJI for char in word):
+                emoji_list.append(word)
+
+        return len(emoji_list)
+
     @classmethod
     def _add_post(cls,row,user_clean_doc_dict):
         uid = row['id']
@@ -19,7 +94,7 @@ class DataFrameHelperFunctions(object):
             post = user_clean_doc_dict[uid]
             return post
         except Exception:
-            return 
+            return []
 
     @classmethod
     def _fill_missing_str(cls):
@@ -316,5 +391,33 @@ class DataFramePreprocessor(object):
 
         ObjectStorage().save_obj(df,'data_clean_df')
         return df
+
+    @classmethod
+    def prepare_df_for_model(cls, df):
+        logger.info('Начинаем готовить датафрейм для модели...')
+        try:
+            df.loc[df['schools_grad_year'] == '','schools_grad_year'] = -1
+            df['guessed_age'] = df.apply(cls.__funct_tools._get_avg_age_from_grad_dates, axis=1)
+            df['guessed_age'] = df['bdate'].apply(cls.__funct_tools._get_age_from_brthd)
+            rang_occupation = {'Не указано' : 0, 'work' : 3, 'university' : 2, 'school' : 1}
+            df['occupation'].replace(rang_occupation, inplace=True)
+            #признаки для анализа
+            feat_completeness_lst = ['about', 'activities', 'books','games','has_mobile', 'home_town','interests','movies', 'music', 'quotes', 'relation', 'political', 'langs', 'religion', 'inspired_by',
+        'people_main', 'life_main', 'smoking', 'alcohol','has_facebook', 'has_instagram', 'has_livejournal',
+        'has_twitter', 'has_skype', 'has_relative']
+            df['avg_completeness'] = df.apply(lambda x: cls.__funct_tools._get_avg_completeness(x,feat_completeness_lst),axis=1)
+            # общее число символов в постах
+            df['post_length'] = df['post'].apply(lambda text: len(text))
+
+            df['tags_number'] = df['post'].apply(lambda x: cls.__funct_tools._count_tags(x))
+            df['emoji_number'] = df['post'].apply(cls.__funct_tools._count_emoji)
+            #Готово, теперь оставим только те признаки, которые нам нужны
+            df = df[['age_cat','followers_count','sex','post','guessed_age','avg_completeness','post_length','tags_number','emoji_number']].copy()
+            logger.info('Датафрей для работы с моделью готов.')
+            return df
+        except Exception as ex:
+            logger.exception(ex)
+            print('Неврзможно подготовить данные дя модели. Возможно, отсутствуют какие то столбцы')
+  
         
 
