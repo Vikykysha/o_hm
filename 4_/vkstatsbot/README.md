@@ -1,6 +1,6 @@
 ﻿
 
-# Проект по предсказанию возраста пользователя через API Vk.
+# Проект по предсказанию возраста пользователя через API Vk. Projects that try to predict the age of the user using API Vkontakte
 
 При запуске скрипта main.py программа собирает данные по пользователям через API, очищает их, готовит к использованию.
 Используюется общедоступная информация со страниц пользователей , отдельно собираются и обрабатываются посты со стен пользователей, если пользователь разрешил к ним доступ.
@@ -9,3 +9,5 @@
 Результаты работы моделей сохраняются в отдельный файл. Модель с наивысшим качеством сохраняется в отдельный файл. 
 Характеристики лучшей модели выводятся на консоль.
 Основная метрика подсчета качества работы модели - ROC_AUC.
+
+Program collect data from site, transform and clean it, extract necessary feautures. Then we use some models to predict age - CountVectorizer, TfidfVectorizer. The results was stored in separate file. The efficiency metric - ROC_AUC.
