@@ -1,4 +1,4 @@
-# Скрапинг веб-сайта КиноПоиск
+# Скрапинг веб-сайта КиноПоиск Scraping Kinopoisk
 
 Скрипт позволяет собрать информацию по просмотренным фильмам определенного пользователяи и вывести по собранным данным определенные статистики.
 
@@ -18,3 +18,5 @@
 
 Для сбора информации необходимо запустить скрипт gathering.py c передаваемыми параметрами 'gather' и необходимым id пользователя в указанной последовательности.
 Для сбора статистики необходимо запустить скрипт gathering.py с передаваемыми параметрами 'stats' и необходимым id пользователя в указанной последовательности.
+
+The script parse website Kinopoisk to extract feautures of the movies from it and calculate some statistics such as: top-10 most popular movies by certain user, top-4 genres which user prefer.
