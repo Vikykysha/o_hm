@@ -10,4 +10,4 @@
 Характеристики лучшей модели выводятся на консоль.
 Основная метрика подсчета качества работы модели - ROC_AUC.
 
-Program collect data from site, transform and clean it, extract necessary feautures. Then we use some models to predict age - CountVectorizer, TfidfVectorizer. The results was stored in separate file. The efficiency metric - ROC_AUC.
+The script collect data from site, transform and clean it, extract necessary feautures. Then we use some models to predict age - CountVectorizer, TfidfVectorizer. The results are stored in separate file. The efficiency metric is ROC_AUC.
