@@ -21,4 +21,4 @@
 
 ###################################################################
 
-The script parse website Kinopoisk to extract feautures of the movies from it and calculate some statistics such as: top-10 most popular movies by certain user, top-4 genres which user prefer.
+Parsing website Kinopoisk to extract feautures of the movies from it and calculating some statistics such as: top-10 most popular movies by certain user, top-4 genres which user prefer.
