@@ -1,6 +1,6 @@
 # Scraping Kinopoisk web-site
 
-***This project is aimed to scraping data from Kinopoisk web-site and calculate some statistics.***
+***This project is aimed to scrap some data from Kinopoisk web-site and calculate different statistics.***
 
 *Used technologies:*
 
