@@ -1,13 +1,9 @@
-﻿
 
-# Проект по предсказанию возраста пользователя через API Vk. Projects that try to predict the age of the user using API Vkontakte
+# Predicting the age of the user using API Vkontakte
 
-При запуске скрипта main.py программа собирает данные по пользователям через API, очищает их, готовит к использованию.
-Используюется общедоступная информация со страниц пользователей , отдельно собираются и обрабатываются посты со стен пользователей, если пользователь разрешил к ним доступ.
-Во время работы программы отдельно визуализируются и сохраняются некоторые статистики по собранным данным.
-Далее на готовых данных тренируются несколько различных моделей. Основные варьируемые признаки в моделях: способ формирования и обработки постов. Отдельно проверяется способ, при котором используется CountVectorizer, отдельно TfidfVectorizer, также варьируютяс параметр ngram_range.
-Результаты работы моделей сохраняются в отдельный файл. Модель с наивысшим качеством сохраняется в отдельный файл. 
-Характеристики лучшей модели выводятся на консоль.
-Основная метрика подсчета качества работы модели - ROC_AUC.
+**The data was load using API of the site, then it was transformed and cleaned from unnecessary features. The data from user's post was also be loaded and concatenated with other profile information to make a preditcion about the age of user. Then CountVectorizer and TfidfVectorizer (with different ngram_range) model was used to predict the user age. The results was stored in separate file. The evaluation metric was ROC_AUC.**
 
-The script collect data from site, transform and clean it, extract necessary feautures. Then we use some models to predict age - CountVectorizer, TfidfVectorizer. The results are stored in separate file. The efficiency metric is ROC_AUC.
+*Used technologies:*
+- Python, Pandas, Numpy;
+- Matplotlib;
+- Scikit-learn (LogisticRegression, CountVectorizer, TfidfVectorizer);
