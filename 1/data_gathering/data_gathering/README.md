@@ -1,24 +1,16 @@
-# Скрапинг веб-сайта КиноПоиск Scraping Kinopoisk
+# Scraping Kinopoisk web-site
 
-Скрипт позволяет собрать информацию по просмотренным фильмам определенного пользователяи и вывести по собранным данным определенные статистики.
+***This project is aimed to scraping data from Kinopoisk web-site and calculate some statistics.***
 
-Функционал проекта:
+*Used technologies:*
 
-1.Собирает данные с сайта
-2.Рассчитывает определенные статистики по данным. 
+- Python, Pandas, Numpy, Matplotlib
+- Selenium, BeautifulSoup
 
-Статистики, которые собирает скрипт:
 
-1.Фильмы за какие годы пользователь просмотрел больше всего (Выводит ТОП-10)
-2.Фильмы каких стран пользователь просмотрел больше всего (Выводит ТОП-10)
-3.Фильмы каких жанров пользователь просмотрел больше всего? (Выводит ТОП-4)
-4.Как распределялся просмотр фильмов пользователем по возрастным диапазонам.
+*It calculates:*
 
-Также выводится информация по собранным данным: количество фильмов, по которым была собрана информация, формат данных.
-
-Для сбора информации необходимо запустить скрипт gathering.py c передаваемыми параметрами 'gather' и необходимым id пользователя в указанной последовательности.
-Для сбора статистики необходимо запустить скрипт gathering.py с передаваемыми параметрами 'stats' и необходимым id пользователя в указанной последовательности.
-
-###################################################################
-
-Parsing website Kinopoisk to extract feautures of the movies from it and calculating some statistics such as: top-10 most popular movies by certain user, top-4 genres which user prefer.
+- TOP-10 most watched movies by user;
+- TOP-10 movies countries;
+- TOP-4 most watched genres;
+- The distribution of views by age categories;
